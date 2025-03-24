@@ -1,0 +1,131 @@
+services:
+  nginx:
+    image: cdeville/nginx:v1.0.0
+    container_name: MyNginx
+    restart: always
+    build: 
+      context: ./requirements/nginx/
+      dockerfile: Dockerfile
+    depends_on:
+      wordpress:
+        condition: service_started
+        restart: true
+    networks:
+      - deepest_dream
+    ports:
+      - "443:443"
+     # - "80:80" # TO REMOVE
+    volumes: 
+      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
+      - /home/leonardo/data/srcs_nginx_logs:/var/log/nginx
+  wordpress:
+    image: cdeville/wordpress:v1.0.0
+    container_name: MyWordpress
+    restart: always
+    build:
+      context: ./requirements/wordpress/
+      dockerfile: Dockerfile
+#    depends_on:
+#      redis:
+#        conditon: service_started
+#        restart: true
+#      mariadb:
+#        conditon: service_started
+#        restart: true
+    networks:
+      - deepest_dream
+    volumes:
+      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
+  mariadb:
+    image: cdeville/mariadb:v1.0.0
+    container_name: MyMariadb
+    restart: always
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    networks:
+      - deepest_dream
+    volumes: 
+    - /home/leonardo/data/srcs_dbdata:/var/lib/mysql
+  ## BONUS ##
+  adminer: 
+    image: cdeville/adminer:v1.0.0
+    container_name: MyAdminer
+    restart: always
+    build:
+      context: ./bonus/adminer/
+      dockerfile: Dockerfile
+    depends_on:
+      wordpress:
+        condition: service_started
+        restart: true
+  #    mariadb:
+  #      condition: service_started
+  #      restart: true
+  #    nginx:
+  #      conditon: service_started
+  #      restart: true
+    networks:
+      - deepest_dream
+    volumes:
+      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
+  vsftpd:
+    image: cdeville/vsftpd:v1.0.0
+    container_name: MyVsftpd
+    restart: always
+    build:
+      context: ./bonus/vsftpd/
+      dockerfile: Dockerfile
+    depends_on:
+      nginx:
+        condition: service_started
+    ports:
+      - "20-21:20-21"
+      # ftp passive ports
+      - "21100-21110:21100-21110"
+    volumes:
+      #- wordpress_volume:/srv/ftps
+      - /home/leonardo/data/srcs_wordpress_volume:/home/vsftpd/tssr/wordpress
+  hugo: 
+    image: cdeville/hugo:v1.0.0
+    container_name: MyHugo
+    restart: always
+    build:
+      context: ./bonus/hugo/
+      dockerfile: Dockerfile
+    networks:
+      - deepest_dream
+    volumes:
+      - /home/leonardo/data/srcs_hugo_volume:/var/hugo
+  redis: 
+    image: cdeville/redis:v1.0.0
+    container_name: MyRedis
+    restart: always
+    build:
+      context: ./bonus/redis/
+      dockerfile: Dockerfile
+    networks:
+      - deepest_dream
+  goaccess: 
+    image: cdeville/goaccess:v1.0.0
+    container_name: MyGoaccess
+    restart: always
+    build:
+      context: ./bonus/goaccess/
+      dockerfile: Dockerfile
+    depends_on:
+      wordpress:
+        condition: service_started
+        restart: true
+    networks:
+      - deepest_dream
+    volumes:
+      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
+      - /home/leonardo/data/srcs_nginx_logs:/var/log/nginx
+networks:
+  deepest_dream:
+    driver: bridge
+#volumes:
+#  wordpress_volume:
+#  dbdata:
+#  hugo_volume:
