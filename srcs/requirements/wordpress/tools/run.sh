@@ -1,7 +1,7 @@
 #!/bin/sh
 DIR_PATH=/var/www/html/sample.com
 
-
+#Verifier car comme un volume est monte, le DIR_PATH existe deja meme s'il est vide
 if [ -d /wordpress_setup/sample.com ] && ! [ -d "$DIR_PATH" ]; then
 	mv /wordpress_setup/sample.com "$DIR_PATH"
 	curl https://downloads.wordpress.org/plugin/redis-cache.2.5.4.zip --output redis-cache.2.5.4.zip
