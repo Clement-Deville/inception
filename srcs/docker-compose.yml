@@ -104,6 +104,9 @@ services:
     build:
       context: ./bonus/redis/
       dockerfile: Dockerfile
+    depends_on:
+      wordpress:
+        condition: service_started
     networks:
       - deepest_dream
   goaccess: 

@@ -6,5 +6,7 @@ RUN apk add --no-cache ca-certificates && apk -U upgrade \
 	&& rm -f /var/cache/apk/* 
 
 COPY ./tools/run.sh /bin/run.sh
+
 EXPOSE 6379
+
 CMD ["/bin/run.sh", "daemon off"]
