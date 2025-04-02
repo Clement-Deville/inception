@@ -12,7 +12,7 @@ fi
 for var in db_root_password db_database db_user db_user_password \
     wordpress_user wordpress_password \
     adminer_user adminer_password \
-    vsftpd_user vsftpd_passowrd; do
+    vsftpd_user vsftpd_password; do
     if ! [ -f "${DIR}/${var}.txt" ] && ! [ -r "${DIR}/${var}.txt" ]; then
         echo "[i] Creating ${DIR}/${var}.txt.."
         touch ${DIR}/${var}.txt

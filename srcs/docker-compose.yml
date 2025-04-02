@@ -14,7 +14,6 @@ services:
       - deepest_dream
     ports:
       - "443:443"
-     # - "80:80" # TO REMOVE
     volumes: 
       - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
       - /home/leonardo/data/srcs_nginx_logs:/var/log/nginx
@@ -28,6 +27,9 @@ services:
     build:
       context: ./requirements/wordpress/
       dockerfile: Dockerfile
+      secrets:
+        - wp_password
+        - wp_user
 #    depends_on:
 #      redis:
 #        conditon: service_started
@@ -46,11 +48,16 @@ services:
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
+      secrets:
+        - db_database
+        - db_root_password
+        - db_user
+        - db_user_password
     networks:
       - deepest_dream
     volumes: 
     - /home/leonardo/data/srcs_dbdata:/var/lib/mysql
-  ## BONUS ##
+##### BONUS #####
   adminer: 
     image: cdeville/adminer:v1.0.0
     container_name: MyAdminer
@@ -58,6 +65,9 @@ services:
     build:
       context: ./bonus/adminer/
       dockerfile: Dockerfile
+      secrets:
+        - adminer_password
+        - adminer_user
     depends_on:
       wordpress:
         condition: service_started
@@ -79,6 +89,9 @@ services:
     build:
       context: ./bonus/vsftpd/
       dockerfile: Dockerfile
+      secrets:
+        - vsftpd_password
+        - vsftpd_user
     depends_on:
       nginx:
         condition: service_started
@@ -140,3 +153,23 @@ secrets:
     file: ../secrets/localhost.crt
   key:
     file: ../secrets/localhost.key
+  wp_password:
+    file: ../secrets/wordpress_password.txt
+  wp_user:
+    file: ../secrets/wordpress_user.txt
+  db_database:
+    file: ../secrets/db_database.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_user:
+    file: ../secrets/db_password.txt
+  db_user:
+    file: ../secrets/db_user_password.txt
+  vsftpd_password:
+    file: ../secrets/vsftpd_password.txt
+  vsftpd_user:
+    file: ../secrets/vsftpd_user.txt
+  adminer_password:
+    file: ../secrets/adminer_password.txt
+  adminer_user:
+    file: ../secrets/adminer_user.txt
