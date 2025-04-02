@@ -31,18 +31,18 @@ for var in ROOT_PASSWORD DATABASE USER PASSWORD CHARSET COLLATION; do
     fi
 done
 
-## Handle *_FILE variables
-#for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
-#    eval mysql_var="\$MYSQL_${var}"
-#    eval mysql_file_var="\$MYSQL_${var}_FILE"
-#    eval mariadb_file_var="\$MARIADB_${var}_FILE"
-#    
-#    if [ -z "$mysql_var" ] && [ -n "$mysql_file_var" ]; then
-#        eval "export MYSQL_${var}=$(read_secret "$mysql_file_var")"
-#    elif [ -z "$mysql_var" ] && [ -n "$mariadb_file_var" ]; then
-#        eval "export MYSQL_${var}=$(read_secret "$mariadb_file_var")"
-#    fi
-#done
+# Handle *_FILE variables
+for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
+   eval mysql_var="\$MYSQL_${var}"
+   eval mysql_file_var="\$MYSQL_${var}_FILE"
+   eval mariadb_file_var="\$MARIADB_${var}_FILE"
+   
+   if [ -z "$mysql_var" ] && [ -n "$mysql_file_var" ]; then
+       eval "export MYSQL_${var}=$(read_secret "$mysql_file_var")"
+   elif [ -z "$mysql_var" ] && [ -n "$mariadb_file_var" ]; then
+       eval "export MYSQL_${var}=$(read_secret "$mariadb_file_var")"
+   fi
+done
 
 ## execute any pre-init scripts
 #for i in /scripts/pre-init.d/*sh
@@ -206,8 +206,5 @@ do
         . ${i}
     fi
 done
-
-##DEGUG
-echo "------------------>MYSQLPASSWD: ${MYSQL_ROOT_PASSWORD}"
 
 exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@
