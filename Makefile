@@ -17,3 +17,15 @@ refresh: build up
 
 ps: 
 	docker compose --project-directory $(WORKDIR) ps
+
+## GENERATING SECRETS
+
+secrets:
+	./generate_secrets.sh
+
+## FOR CLEANING SECRETS
+
+clean_sec:
+	rm ./secrets/*
+
+.PHONY: secrets
