@@ -3,13 +3,14 @@ USER root
 
 ##ENV (TO REMOVE)
 
-ENV MYSQL_ROOT_PASSWORD=rootpassword \
-    MYSQL_DATABASE=mydatabase \
-    MYSQL_USER=myuser \
-    MYSQL_PASSWORD=mypassword
+#ENV MYSQL_ROOT_PASSWORD=rootpassword \
+#    MYSQL_DATABASE=mydatabase \
+#    MYSQL_USER=myuser \
+#    MYSQL_PASSWORD=mypassword
 
 COPY ./tools/init.sql /
 COPY ./tools/run.sh /
+
 RUN apk add --no-cache \
     	ca-certificates \
 	&& apk update && apk add --no-cache mariadb mariadb-server-utils && \

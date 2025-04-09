@@ -162,8 +162,8 @@ secrets:
   db_root_password:
     file: ../secrets/db_root_password.txt
   db_user:
-    file: ../secrets/db_password.txt
-  db_user:
+    file: ../secrets/db_user.txt
+  db_user_password:
     file: ../secrets/db_user_password.txt
   vsftpd_password:
     file: ../secrets/vsftpd_password.txt
