@@ -21,7 +21,7 @@ RUN mkdir -p /var/lib/mysql \
 	&& mkdir /docker-entrypoint-initdb.d \
 	&& chmod +x /init.sql /run.sh && mv /init.sql /docker-entrypoint-initdb.d/init.sql \
 	&& mv /run.sh /docker-entrypoint-initdb.d/run.sh
+
 EXPOSE 3306
+
 CMD ["/docker-entrypoint-initdb.d/run.sh"]
-##DEBUG
-#CMD ["sleep", "infinity"]

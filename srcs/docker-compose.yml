@@ -15,8 +15,8 @@ services:
     ports:
       - "443:443"
     volumes: 
-      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
-      - /home/leonardo/data/srcs_nginx_logs:/var/log/nginx
+      - ~/data/srcs_wordpress_volume:/var/www/html
+      - ~/data/srcs_nginx_logs:/var/log/nginx
     secrets:
       - certificate
       - key
@@ -40,7 +40,7 @@ services:
     networks:
       - deepest_dream
     volumes:
-      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
+      - ~/data/srcs_wordpress_volume:/var/www/html
   mariadb:
     image: cdeville/mariadb:v1.0.0
     container_name: MyMariadb
@@ -56,7 +56,7 @@ services:
     networks:
       - deepest_dream
     volumes: 
-    - /home/leonardo/data/srcs_dbdata:/var/lib/mysql
+    - ~/data/srcs_dbdata:/var/lib/mysql
 ##### BONUS #####
   adminer: 
     image: cdeville/adminer:v1.0.0
@@ -81,7 +81,7 @@ services:
     networks:
       - deepest_dream
     volumes:
-      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
+      - ~/data/srcs_wordpress_volume:/var/www/html
   vsftpd:
     image: cdeville/vsftpd:v1.0.0
     container_name: MyVsftpd
@@ -101,7 +101,7 @@ services:
       - "21100-21110:21100-21110"
     volumes:
       #- wordpress_volume:/srv/ftps
-      - /home/leonardo/data/srcs_wordpress_volume:/home/vsftpd/tssr/wordpress
+      - ~/data/srcs_wordpress_volume:/home/vsftpd/tssr/wordpress
   hugo: 
     image: cdeville/hugo:v1.0.0
     container_name: MyHugo
@@ -112,7 +112,7 @@ services:
     networks:
       - deepest_dream
     volumes:
-      - /home/leonardo/data/srcs_hugo_volume:/var/hugo
+      - ~/data/srcs_hugo_volume:/var/hugo
   redis: 
     image: cdeville/redis:v1.0.0
     container_name: MyRedis
@@ -139,8 +139,8 @@ services:
     networks:
       - deepest_dream
     volumes:
-      - /home/leonardo/data/srcs_wordpress_volume:/var/www/html
-      - /home/leonardo/data/srcs_nginx_logs:/var/log/nginx
+      - ~/data/srcs_wordpress_volume:/var/www/html
+      - ~/data/srcs_nginx_logs:/var/log/nginx
 networks:
   deepest_dream:
     driver: bridge
