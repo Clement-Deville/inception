@@ -27,9 +27,12 @@ services:
     build:
       context: ./requirements/wordpress/
       dockerfile: Dockerfile
-      secrets:
-        - wp_password
-        - wp_user
+    secrets:
+      - wp_password
+      - wp_user
+      - db_user
+      - db_password
+      - database
 #    depends_on:
 #      redis:
 #        conditon: service_started
@@ -48,11 +51,11 @@ services:
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
-      secrets:
-        - db_database
-        - db_root_password
-        - db_user
-        - db_user_password
+    secrets:
+      - db_database
+      - db_root_password
+      - db_user
+      - db_user_password
     networks:
       - deepest_dream
     volumes: 
