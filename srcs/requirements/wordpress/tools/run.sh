@@ -13,4 +13,6 @@ chown -R www:www-data "$DIR_PATH" && chmod -R 755 "$DIR_PATH"
 
 # start php-fpm
 mkdir -p /usr/logs/php-fpm
+chown -R www:www-data "/usr/logs/php-fpm" && chmod -R 755 "/usr/logs/php-fpm"
+
 exec php-fpm82 --nodaemonize
