@@ -35,7 +35,7 @@ define( 'DB_NAME', getenv_docker('DB_DATABASE') );
 define( 'DB_USER', getenv_docker('DB_USER') );
 
 /** Database password */
-define( 'DB_PASSWORD', getenv_docker('DB_PASSWORD') );
+define( 'DB_PASSWORD', getenv_docker('DB_USER_PASSWORD') );
 
 /** Database hostname */
 define( 'DB_HOST', 'MyMariadb:3306' );

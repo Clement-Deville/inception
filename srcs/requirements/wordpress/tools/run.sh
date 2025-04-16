@@ -28,7 +28,7 @@ read_secret() {
 }
 
 # Set WP_ variables based on MARIADB_ variables or secrets if WP_ is not set
-for var in WP_USER WP_PASSWORD DB_DATABASE DB_USER DB_PASSWORD; do
+for var in WP_USER WP_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
     eval wp_var="\$${var}"
     
     # Check secrets

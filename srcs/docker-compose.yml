@@ -31,7 +31,7 @@ services:
       - wp_password
       - wp_user
       - db_user
-      - db_password
+      - db_user_password
       - db_database
 #    depends_on:
 #      redis:
