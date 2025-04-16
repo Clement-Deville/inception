@@ -3,10 +3,10 @@ WORKDIR=./srcs/
 build:
 	docker compose --project-directory $(WORKDIR) build
 upd:
-	docker compose --project-directory $(WORKDIR) up -d 
+	docker compose --project-directory $(WORKDIR) up -d
 
 up:
-	docker compose --project-directory $(WORKDIR) up 
+	docker compose --project-directory $(WORKDIR) up
 
 stop:
 	docker compose --project-directory $(WORKDIR) stop
@@ -18,13 +18,13 @@ re: down build up
 
 refresh: build up
 
-ps: 
+ps:
 	docker compose --project-directory $(WORKDIR) ps
 
 ## GENERATING SECRETS
 
 secrets:
-	./generate_secrets.sh
+	.srcs/scripts/generate_secrets.sh
 
 ## FOR CLEANING SECRETS
 
