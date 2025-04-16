@@ -6,7 +6,7 @@ RUN apk add --no-cache ca-certificates && apk update && apk upgrade && apk add -
 	php82-xml php82-zip php82-phar curl zip\
 	&& rm -f /var/cache/apk/*
 
-RUN curl https://fr.wordpress.org/latest-fr_FR.zip --output /latest-fr_FR.zip \ 
+RUN curl https://fr.wordpress.org/latest-fr_FR.zip --output /latest-fr_FR.zip \
 	&& unzip /latest-fr_FR.zip && rm /latest-fr_FR.zip && mkdir /wordpress_setup\
 	&& mv /wordpress /wordpress_setup/sample.com && ln -s /usr/bin/php82 /usr/bin/php
 
@@ -20,8 +20,8 @@ RUN adduser -G www-data www 2> /debug || echo lol && chmod +x /wordpress_setup/*
 	&& chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp-cli \
 	&& chown :www-data /usr/bin/wp-cli \
 	&& mkdir -p /usr/logs/php-fpm \
-	&& chown -R www:www-data "/usr/logs/php-fpm" && chmod -R 755 "/usr/logs/php-fpm" \ 
-	&& mkdir /var/www/html && chown www:www-data /var/www/html
+	&& chown -R www:www-data "/usr/logs/php-fpm" && chmod -R 755 "/usr/logs/php-fpm" \
+	&& mkdir -p /var/www/html && chown www:www-data /var/www/html
 
 RUN apk add mariadb-client
 
