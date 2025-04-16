@@ -203,4 +203,19 @@ do
     fi
 done
 
+cat << EOF 
+#############################
+#           DEBUG           #
+#############################
+EOF
+
+for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
+
+for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
+    eval mysql_var="\$MYSQL_${var}"
+    
+    echo "$var = ${mysql_var})"
+done
+
+
 exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@

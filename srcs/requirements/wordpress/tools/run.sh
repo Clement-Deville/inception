@@ -48,6 +48,16 @@ for var in WP_USER WP_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
    fi
 done
 
+cat << EOF 
+#############################
+#           DEBUG           #
+#############################
+EOF
+
+for var in WP_USER WP_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
+    echo "$var = $(eval \$${var})"
+done
+
 # # Handle WP_PASSWORD
 # if [ -n "$WP_PASSWORD_FILE" ]; then
 # 	WP_PASSWORD=$(read_secret "$WP_PASSWORD_FILE")
