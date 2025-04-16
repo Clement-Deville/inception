@@ -20,7 +20,7 @@ RUN adduser -G www-data www 2> /debug || echo lol && chmod +x /wordpress_setup/*
 	&& chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp-cli \
 	&& chown :www-data /usr/bin/wp-cli \
 	&& mkdir -p /usr/logs/php-fpm \
-	&& chown -R www:www-data "/usr/logs/php-fpm" && chmod -R 755 "/usr/logs/php-fpm" 
+	&& chown -R www:www-data "/usr/logs/php-fpm" && chmod -R 755 "/usr/logs/php-fpm" \ 
 	&& mkdir /var/www/html && chown www:www-data /var/www/html
 
 RUN apk add mariadb-client
