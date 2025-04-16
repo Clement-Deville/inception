@@ -15,18 +15,10 @@ for var in ROOT_PASSWORD DATABASE USER PASSWORD CHARSET COLLATION; do
     eval mysql_var="\$MYSQL_${var}"
     eval mariadb_var="\$MARIADB_${var}"
     
-    # Check environment variables
-    if [ -z "$mysql_var" ] && [ -n "$mariadb_var" ]; then
-        eval "export MYSQL_${var}=\$mariadb_var"
-    fi
-    
     # Check secrets
-    mysql_secret="/run/secrets/mysql_$(echo $var | tr '[:upper:]' '[:lower:]')"
-    mariadb_secret="/run/secrets/mariadb_$(echo $var | tr '[:upper:]' '[:lower:]')"
+    mysql_secret="/run/secrets/db_$(echo $var | tr '[:upper:]' '[:lower:]')"
     
-    if [ -z "$mysql_var" ] && [ -f "$mariadb_secret" ]; then
-        eval "export MYSQL_${var}=$(read_secret "$mariadb_secret")"
-    elif [ -z "$mysql_var" ] && [ -f "$mysql_secret" ]; then
+    if [ -z "$mysql_var" ] && [ -f "$mysql_secret" ]; then
         eval "export MYSQL_${var}=$(read_secret "$mysql_secret")"
     fi
 done
@@ -35,23 +27,11 @@ done
 for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
    eval mysql_var="\$MYSQL_${var}"
    eval mysql_file_var="\$MYSQL_${var}_FILE"
-   eval mariadb_file_var="\$MARIADB_${var}_FILE"
    
    if [ -z "$mysql_var" ] && [ -n "$mysql_file_var" ]; then
        eval "export MYSQL_${var}=$(read_secret "$mysql_file_var")"
-   elif [ -z "$mysql_var" ] && [ -n "$mariadb_file_var" ]; then
-       eval "export MYSQL_${var}=$(read_secret "$mariadb_file_var")"
    fi
 done
-
-## execute any pre-init scripts
-#for i in /scripts/pre-init.d/*sh
-#do
-#    if [ -e "${i}" ]; then
-#        echo "[i] pre-init.d - processing $i"
-#        . "${i}"
-#    fi
-#done
 
 if [ -d "/run/mysqld" ]; then
     echo "[i] mysqld already present, skipping creation"
@@ -74,8 +54,8 @@ if [ -d /var/lib/mysql/mysql ]; then
     # Handle MYSQL_ROOT_PASSWORD
     if [ -n "$MYSQL_ROOT_PASSWORD_FILE" ]; then
         MYSQL_ROOT_PASSWORD=$(read_secret "$MYSQL_ROOT_PASSWORD_FILE")
-    elif [ -f "/run/secrets/mysql_root_password" ]; then
-        MYSQL_ROOT_PASSWORD=$(read_secret "/run/secrets/mysql_root_password")
+    elif [ -f "/run/secrets/db_root_password" ]; then
+        MYSQL_ROOT_PASSWORD=$(read_secret "/run/secrets/db_root_password")
     fi
 
     if [ -z "$MYSQL_ROOT_PASSWORD" ]; then
@@ -86,8 +66,8 @@ if [ -d /var/lib/mysql/mysql ]; then
     # Handle MYSQL_DATABASE
     if [ -n "$MYSQL_DATABASE_FILE" ]; then
         MYSQL_DATABASE=$(read_secret "$MYSQL_DATABASE_FILE")
-    elif [ -f "/run/secrets/mysql_database" ]; then
-        MYSQL_DATABASE=$(read_secret "/run/secrets/mysql_database")
+    elif [ -f "/run/secrets/db_database" ]; then
+        MYSQL_DATABASE=$(read_secret "/run/secrets/db_database")
     else
         MYSQL_DATABASE=${MYSQL_DATABASE:-""}
     fi
@@ -95,8 +75,8 @@ if [ -d /var/lib/mysql/mysql ]; then
     # Handle MYSQL_USER
     if [ -n "$MYSQL_USER_FILE" ]; then
         MYSQL_USER=$(read_secret "$MYSQL_USER_FILE")
-    elif [ -f "/run/secrets/mysql_user" ]; then
-        MYSQL_USER=$(read_secret "/run/secrets/mysql_user")
+    elif [ -f "/run/secrets/db_user" ]; then
+        MYSQL_USER=$(read_secret "/run/secrets/db_user")
     else
         MYSQL_USER=${MYSQL_USER:-""}
     fi
@@ -104,8 +84,8 @@ if [ -d /var/lib/mysql/mysql ]; then
     # Handle MYSQL_PASSWORD
     if [ -n "$MYSQL_PASSWORD_FILE" ]; then
         MYSQL_PASSWORD=$(read_secret "$MYSQL_PASSWORD_FILE")
-    elif [ -f "/run/secrets/mysql_password" ]; then
-        MYSQL_PASSWORD=$(read_secret "/run/secrets/mysql_password")
+    elif [ -f "/run/secrets/db_user_password" ]; then
+        MYSQL_PASSWORD=$(read_secret "/run/secrets/db_user_password")
     else
         MYSQL_PASSWORD=${MYSQL_PASSWORD:-""}
     fi
