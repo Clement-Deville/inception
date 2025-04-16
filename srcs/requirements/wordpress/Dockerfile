@@ -16,10 +16,17 @@ COPY --chown=:www-data ./tools/pre-run.sh /wordpress_setup/pre-run.sh
 
 RUN adduser -G www-data www 2> /debug || echo lol && chmod +x /wordpress_setup/*.sh && /wordpress_setup/pre-run.sh\
 && addgroup -S -g 1001 nginx && adduser -S -g 1001 -u 1001 --no-create-home nginx \
-	&& curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp-cli && chown :www-data /usr/bin/wp-cli 
+	&& curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp-cli \
+	&& chown :www-data /usr/bin/wp-cli \
+	&& mkdir -p /usr/logs/php-fpm \
+	&& chown -R www:www-data "/usr/logs/php-fpm" && chmod -R 755 "/usr/logs/php-fpm" 
+	&& mkdir /var/www/html && chown www:www-data /var/www/html
 
 RUN apk add mariadb-client
 
 EXPOSE 9000
+
+USER www
 
 CMD ["/wordpress_setup/run.sh", "daemon off"]
