@@ -28,24 +28,25 @@ read_secret() {
 }
 
 # Set WP_ variables based on MARIADB_ variables or secrets if WP_ is not set
-for var in WP_USER WP_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
-    eval wp_var="\$${var}"
+for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
+	eval wp_var="\$${var}"
     
-    # Check secrets
+	# Check secrets
 	## If secrets is mounted, export secret that has been read
-    wp_secret="/run/secrets/$(echo $var | tr '[:upper:]' '[:lower:]')"
+   	wp_secret="/run/secrets/$(echo $var | tr '[:upper:]' '[:lower:]')"
     
 	if [ -z "$wp_var" ] && [ -f "$wp_secret" ]; then
-        eval "export ${var}=$(read_secret "$wp_secret")"
-    fi
-
+        	eval "export ${var}=$(read_secret "$wp_secret")"
+    	fi
+	
+	eval "echo \$${var}"
 	# Check _FILE
 	## If specific file is specified, read secret from it
-   eval wp_file_var="\$${var}_FILE"
+   	eval wp_file_var="\$${var}_FILE"
    
-   if [ -z "$wp_var" ] && [ -n "$wp_file_var" ]; then
-       eval "export ${var}=$(read_secret "$wp_file_var")"
-   fi
+	if [ -z "$wp_var" ] && [ -n "$wp_file_var" ]; then
+		eval "export ${var}=$(read_secret "$wp_file_var")"
+   	fi
 done
 
 cat << EOF 
@@ -54,10 +55,13 @@ cat << EOF
 #############################
 EOF
 
-for var in WP_USER WP_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
-    echo "$var = $(eval \$${var})"
+for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
+    eval exp_var="\$${var}"
+    
+    echo "$var = ${exp_var}"
 done
 
+env 
 # # Handle WP_PASSWORD
 # if [ -n "$WP_PASSWORD_FILE" ]; then
 # 	WP_PASSWORD=$(read_secret "$WP_PASSWORD_FILE")
