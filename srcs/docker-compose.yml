@@ -32,7 +32,7 @@ services:
       - wp_user
       - db_user
       - db_password
-      - database
+      - db_database
 #    depends_on:
 #      redis:
 #        conditon: service_started

@@ -29,7 +29,7 @@ if (!function_exists('getenv_docker'))
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', getenv_docker('DATABASE') );
+define( 'DB_NAME', getenv_docker('DB_DATABASE') );
 ## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV
 /** Database username */
 define( 'DB_USER', getenv_docker('DB_USER') );
