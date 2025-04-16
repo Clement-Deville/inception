@@ -18,15 +18,24 @@
  * @package WordPress
  */
 
+/* Defining function that get secrets from environment */
+
+if (!function_exists('getenv_docker'))
+{
+	function getenv_docker($env) {
+		return getenv($env);
+	}
+}
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'mydatabase' );
+define( 'DB_NAME', getenv_docker('DATABASE') );
 ## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV
 /** Database username */
-define( 'DB_USER', 'root' );
+define( 'DB_USER', getenv_docker('DB_USER') );
 
 /** Database password */
-define( 'DB_PASSWORD', 'rootpassword' );
+define( 'DB_PASSWORD', getenv_docker('DB_PASSWORD') );
 
 /** Database hostname */
 define( 'DB_HOST', 'MyMariadb:3306' );
