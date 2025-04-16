@@ -24,7 +24,7 @@ ps:
 ## GENERATING SECRETS
 
 secrets:
-	.srcs/scripts/generate_secrets.sh
+	./srcs/scripts/generate_secrets.sh
 
 ## FOR CLEANING SECRETS
 
