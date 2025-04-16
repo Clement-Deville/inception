@@ -210,11 +210,9 @@ cat << EOF
 EOF
 
 for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
-
-for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
     eval mysql_var="\$MYSQL_${var}"
     
-    echo "$var = ${mysql_var})"
+    echo "$var = $(eval \$${var} )"
 done
 
 

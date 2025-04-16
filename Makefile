@@ -2,8 +2,11 @@ WORKDIR=./srcs/
 
 build:
 	docker compose --project-directory $(WORKDIR) build
-up:
+upd:
 	docker compose --project-directory $(WORKDIR) up -d 
+
+up:
+	docker compose --project-directory $(WORKDIR) up 
 
 stop:
 	docker compose --project-directory $(WORKDIR) stop
