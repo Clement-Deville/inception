@@ -14,10 +14,10 @@ read_secret() {
 for var in ROOT_PASSWORD DATABASE USER PASSWORD CHARSET COLLATION; do
     eval mysql_var="\$MYSQL_${var}"
     eval mariadb_var="\$MARIADB_${var}"
-    
+
     # Check secrets
     mysql_secret="/run/secrets/db_$(echo $var | tr '[:upper:]' '[:lower:]')"
-    
+
     if [ -z "$mysql_var" ] && [ -f "$mysql_secret" ]; then
         eval "export MYSQL_${var}=$(read_secret "$mysql_secret")"
     fi
@@ -27,7 +27,7 @@ done
 for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
    eval mysql_var="\$MYSQL_${var}"
    eval mysql_file_var="\$MYSQL_${var}_FILE"
-   
+
    if [ -z "$mysql_var" ] && [ -n "$mysql_file_var" ]; then
        eval "export MYSQL_${var}=$(read_secret "$mysql_file_var")"
    fi
@@ -45,7 +45,10 @@ fi
 if [ -d /var/lib/mysql/mysql ]; then
     echo "[i] MySQL directory already present, skipping creation"
     chown -R mysql:mysql /var/lib/mysql
-
+else
+	echo "[i] DB data directory not found, creating initial DBs"
+	
+	chown -R mysql:mysql /var/lib/mysql
     # Initializes the MySQL data directory and creates the system tables that it contains
 
     mysql_install_db 	--user=mysql \
@@ -94,7 +97,7 @@ if [ -d /var/lib/mysql/mysql ]; then
     if [ ! -f "$tfile" ]; then
         return 1
     fi
- 
+
     cat << EOF > $tfile
 USE mysql;
 FLUSH PRIVILEGES ;
@@ -140,7 +143,7 @@ EOF
 			--silent-startup \
 			> "${TEMP_OUTPUT_LOG}" 2>&1 &
         PID="$!"
-        
+
         # watch the output log until the server is running
         until tail "${TEMP_OUTPUT_LOG}" | grep -q "Version:"; do
             sleep 0.2
@@ -149,7 +152,7 @@ EOF
         # use mysql client to import seed files while temp db is running
         # use the starting MYSQL_DATABASE so mysql knows where to import
         MYSQL_CLIENT="/usr/bin/mysql -u root -p$MYSQL_ROOT_PASSWORD"
-        
+
         # loop through all the files in the seed directory
         # redirect input (<) from .sql files into the mysql client command line
         # pipe (|) the output of using `gunzip -c` on .sql.gz files
@@ -183,7 +186,7 @@ do
     fi
 done
 
-cat << EOF 
+cat << EOF
 #############################
 #           DEBUG           #
 #############################
@@ -191,10 +194,11 @@ EOF
 
 for var in ROOT_PASSWORD DATABASE USER PASSWORD; do
     eval mysql_var="\$MYSQL_${var}"
-    
+
     echo "$var = ${mysql_var}"
-    
+
 done
 
+env
 
 exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@

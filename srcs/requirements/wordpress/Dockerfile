@@ -27,6 +27,6 @@ RUN apk add mariadb-client
 
 EXPOSE 9000
 
-USER www
+#USER www
 
 CMD ["/wordpress_setup/run.sh", "daemon off"]

@@ -1,6 +1,7 @@
 #!/bin/sh
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
-if [ ! -d "/var/hugo/quickstart" ] 
+
+if [ ! -d "/var/hugo/quickstart" ]
 then
 	mkdir -p /var/hugo
 	hugo new site /var/hugo/quickstart --format yaml
@@ -8,6 +9,7 @@ then
 	git init
 	git clone https://github.com/adityatelange/hugo-PaperMod themes/PaperMod --depth=1
 	echo "theme PaperMod" >> /var/hugo/quickstart/hugo.yaml
+	mv /hugo.yaml /var/hugo/quickstart/hugo.yaml
 else
 	cd /var/hugo/quickstart
 fi
