@@ -1,6 +1,20 @@
 #!/bin/sh
 DIR_PATH=/var/www/html/sample.com
 
+#Verifier car comme un volume est monte, le DIR_PATH existe deja meme s'il est vide
+if [ -d /wordpress_setup/sample.com ] && ! [ -f "$DIR_PATH/wp-config.php" ]; then
+	echo "[i] Creating Wordpress Website"
+	mv /wordpress_setup/sample.com/* "$DIR_PATH"/
+	curl https://downloads.wordpress.org/plugin/redis-cache.2.5.4.zip --output redis-cache.2.5.4.zip
+	wp-cli plugin install redis-cache.2.5.4.zip –activate
+	wp-cli redis enable
+else
+	echo "[i] Skipping Wordpress creation"
+	mv /wordpress_setup/sample.com/wp-config.php "$DIR_PATH"/
+fi
+
+chown -R www:www-data "$DIR_PATH" && chmod -R 755 "$DIR_PATH"
+
 ### HANDLING WP SECRETS
 
 # Function to read secret from file
@@ -34,37 +48,6 @@ for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWOR
 		eval "export ${var}=$(read_secret "$wp_file_var")"
    	fi
 done
-
-#Verifier car comme un volume est monte, le DIR_PATH existe deja meme s'il est vide
-if [ -d /wordpress_setup/sample.com ] && ! [ -f "$DIR_PATH/wp-config.php" ]; then
-	echo "[i] Creating Wordpress Website"
-	cp -R /wordpress_setup/sample.com/ "$DIR_PATH"
-	cat > ~/.my.cnf << EOF
-[mysql]
-ssl-verify-server-cert=off
-EOF
-	until mariadb -h mariadb -u $DB_USER -p$DB_USER_PASSWORD $DB_DATABASE; do
-		sleep 1
-	done
-	rm ~/.my.cnf
-	wp-cli core install --path="$DIR_PATH" \
-		--url=localhost \
-		--title="Your website title" \
-		--admin_user="$WORDPRESS_USER" \
-		--admin_password="$WORDPRESS_PASSWORD" \
-		--admin_email="your_email@example.com" \
-			|| (rm $DIR_PATH/wp-config.php && exit 1)
-	curl https://downloads.wordpress.org/plugin/redis-cache.2.5.4.zip --output redis-cache.2.5.4.zip
-	wp-cli --path="$DIR_PATH" plugin install redis-cache.2.5.4.zip --activate
-	wp-cli --path="$DIR_PATH" redis enable
-else
-	echo "[i] Skipping Wordpress creation"
-	mv /wordpress_setup/sample.com/wp-config.php "$DIR_PATH"/
-fi
-
-chown -R www:www-data "$DIR_PATH" && chmod -R 755 "$DIR_PATH"
-
-
 
 cat << EOF
 #############################

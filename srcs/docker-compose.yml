@@ -1,49 +1,4 @@
 services:
-  nginx:
-    image: cdeville/nginx:v1.0.0
-    container_name: MyNginx
-    restart: always
-    build: 
-      context: ./requirements/nginx/
-      dockerfile: Dockerfile
-    depends_on:
-      wordpress:
-        condition: service_started
-        restart: true
-    networks:
-      - deepest_dream
-    ports:
-      - "443:443"
-    volumes: 
-      - ~/data/srcs_wordpress_volume:/var/www/html
-      - ~/data/srcs_nginx_logs:/var/log/nginx
-    secrets:
-      - certificate
-      - key
-  wordpress:
-    image: cdeville/wordpress:v1.0.0
-    container_name: MyWordpress
-    restart: always
-    build:
-      context: ./requirements/wordpress/
-      dockerfile: Dockerfile
-    secrets:
-      - wp_password
-      - wp_user
-      - db_user
-      - db_user_password
-      - db_database
-#    depends_on:
-#      redis:
-#        conditon: service_started
-#        restart: true
-#      mariadb:
-#        conditon: service_started
-#        restart: true
-    networks:
-      - deepest_dream
-    volumes:
-      - ~/data/srcs_wordpress_volume:/var/www/html
   mariadb:
     image: cdeville/mariadb:v1.0.0
     container_name: MyMariadb
@@ -58,10 +13,54 @@ services:
       - db_user_password
     networks:
       - deepest_dream
-    volumes: 
+    volumes:
     - ~/data/srcs_dbdata:/var/lib/mysql
+  nginx:
+    image: cdeville/nginx:v1.0.0
+    container_name: MyNginx
+    restart: always
+    build:
+      context: ./requirements/nginx/
+      dockerfile: Dockerfile
+    depends_on:
+      wordpress:
+        condition: service_started
+        restart: true
+    networks:
+      - deepest_dream
+    ports:
+      - "443:443"
+    volumes:
+      - ~/data/srcs_wordpress_volume:/var/www/html
+      - ~/data/srcs_nginx_logs:/var/log/nginx
+    secrets:
+      - certificate
+      - key
+  wordpress:
+    image: cdeville/wordpress:v1.0.0
+    container_name: MyWordpress
+    restart: always
+    build:
+      context: ./requirements/wordpress/
+      dockerfile: Dockerfile
+    secrets:
+      - wordpress_password
+      - wordpress_user
+      - db_user
+      - db_user_password
+      - db_database
+    depends_on:
+#      redis:
+#        conditon: service_started
+#        restart: true
+      mariadb:
+        condition: service_started
+    networks:
+      - deepest_dream
+    volumes:
+      - ~/data/srcs_wordpress_volume:/var/www/html
 ##### BONUS #####
-  adminer: 
+  adminer:
     image: cdeville/adminer:v1.0.0
     container_name: MyAdminer
     restart: always
@@ -105,7 +104,7 @@ services:
     volumes:
       #- wordpress_volume:/srv/ftps
       - ~/data/srcs_wordpress_volume:/home/vsftpd/tssr/wordpress
-  hugo: 
+  hugo:
     image: cdeville/hugo:v1.0.0
     container_name: MyHugo
     restart: always
@@ -116,7 +115,7 @@ services:
       - deepest_dream
     volumes:
       - ~/data/srcs_hugo_volume:/var/hugo
-  redis: 
+  redis:
     image: cdeville/redis:v1.0.0
     container_name: MyRedis
     restart: always
@@ -128,7 +127,7 @@ services:
         condition: service_started
     networks:
       - deepest_dream
-  goaccess: 
+  goaccess:
     image: cdeville/goaccess:v1.0.0
     container_name: MyGoaccess
     restart: always
@@ -156,9 +155,9 @@ secrets:
     file: ../secrets/localhost.crt
   key:
     file: ../secrets/localhost.key
-  wp_password:
+  wordpress_password:
     file: ../secrets/wordpress_password.txt
-  wp_user:
+  wordpress_user:
     file: ../secrets/wordpress_user.txt
   db_database:
     file: ../secrets/db_database.txt
