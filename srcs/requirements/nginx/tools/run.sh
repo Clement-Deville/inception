@@ -35,9 +35,10 @@ done
 
 ## Generating Authentification Password for goaccess
 
-echo "[i] Generating password"
-
-htpasswd -b -c /etc/nginx/auth/goaccess/.htpasswd "$AUTH_USER" "$AUTH_PASSWORD" 2>/dev/nyll
+if ! [ -f /etc/nginx/auth/goaccess/.htpasswd ]; then
+	echo "[i] Generating password"
+	htpasswd -b -c /etc/nginx/auth/goaccess/.htpasswd "$AUTH_USER" "$AUTH_PASSWORD" 2>/dev/null
+fi
 
 ## Starts NGINX
 
