@@ -12,7 +12,7 @@ RUN apk add --no-cache \
 RUN mkdir -p /var/lib/mysql \
 	&& chown -R mysql:mysql /var/lib/mysql \
 	&& mkdir /docker-entrypoint-initdb.d \
-	&& chmod +x /init.sql /run.sh && mv /init.sql /docker-entrypoint-initdb.d/init.sql \
+	&& chmod +x /run.sh \
 	&& mv /run.sh /docker-entrypoint-initdb.d/run.sh
 
 EXPOSE 3306

@@ -43,9 +43,12 @@ if [ -d /wordpress_setup/sample.com ] && ! [ -f "$DIR_PATH/wp-config.php" ]; the
 [mysql]
 ssl-verify-server-cert=off
 EOF
-	until mariadb -h mariadb -u $DB_USER -p$DB_USER_PASSWORD $DB_DATABASE; do
+	until mariadb -h mariadb -u "$DB_USER" -p"$DB_USER_PASSWORD" "$DB_DATABASE" 2>/dev/null; do
+		echo "[i] Waiting for Mariadb to be Up ..."
 		sleep 1
 	done
+		echo "[i] Mariadb UP!"
+		echo "Starting WP INSTALL"
 	rm ~/.my.cnf
 	wp-cli core install --path="$DIR_PATH" \
 		--url=localhost \
@@ -53,7 +56,7 @@ EOF
 		--admin_user="$WORDPRESS_USER" \
 		--admin_password="$WORDPRESS_PASSWORD" \
 		--admin_email="your_email@example.com" \
-			|| (rm $DIR_PATH/wp-config.php && exit 1)
+			|| (rm "$DIR_PATH"/wp-config.php && exit 1)
 	curl https://downloads.wordpress.org/plugin/redis-cache.2.5.4.zip --output redis-cache.2.5.4.zip
 	wp-cli --path="$DIR_PATH" plugin install redis-cache.2.5.4.zip --activate
 	wp-cli --path="$DIR_PATH" redis enable
@@ -64,58 +67,16 @@ fi
 
 chown -R www:www-data "$DIR_PATH" && chmod -R 755 "$DIR_PATH"
 
+# cat << EOF
+# #############################
+# #           DEBUG           #
+# #############################
+# EOF
 
+# for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
+#     eval exp_var="\$${var}"
 
-cat << EOF
-#############################
-#           DEBUG           #
-#############################
-EOF
+#     echo "$var = ${exp_var}"
+# done
 
-for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
-    eval exp_var="\$${var}"
-
-    echo "$var = ${exp_var}"
-done
-
-env
-# # Handle WP_PASSWORD
-# if [ -n "$WP_PASSWORD_FILE" ]; then
-# 	WP_PASSWORD=$(read_secret "$WP_PASSWORD_FILE")
-# elif [ -f "/run/secrets/wp_password" ]; then
-# 	WP_PASSWORD=$(read_secret "/run/secrets/wp_password")
-# fi
-
-# if [ -z "$WP_PASSWORD" ]; then
-# 	WP_PASSWORD=$(pwgen 16 1)
-# 	echo "[i] MySQL root Password: $WP_PASSWORD"
-# fi
-
-# # Handle WP_DATABASE
-# if [ -n "$WP_DATABASE_FILE" ]; then
-# 	WP_DATABASE=$(read_secret "$WP_DATABASE_FILE")
-# elif [ -f "/run/secrets/database" ]; then
-# 	WP_DATABASE=$(read_secret "/run/secrets/database")
-# else
-# 	WP_DATABASE=${WP_DATABASE:-""}
-# fi
-
-# # Handle WP_USER
-# if [ -n "$WP_USER_FILE" ]; then
-# 	WP_USER=$(read_secret "$WP_USER_FILE")
-# elif [ -f "/run/secrets/wp_user" ]; then
-# 	WP_USER=$(read_secret "/run/secrets/wp_user")
-# else
-# 	WP_USER=${WP_USER:-""}
-# fi
-
-# # Handle WP_PASSWORD
-# if [ -n "$WP_PASSWORD_FILE" ]; then
-# 	WP_PASSWORD=$(read_secret "$WP_PASSWORD_FILE")
-# elif [ -f "/run/secrets/wp_password" ]; then
-# 	WP_PASSWORD=$(read_secret "/run/secrets/wp_password")
-# else
-# 	WP_PASSWORD=${WP_PASSWORD:-""}
-# fi
-
-exec php-fpm82 --nodaemonize
+exec su - www -c 'php-fpm82 --nodaemonize'
