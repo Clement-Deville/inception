@@ -36,6 +36,8 @@ services:
     secrets:
       - certificate
       - key
+      - auth_user
+      - auth_password
   wordpress:
     image: cdeville/wordpress:v1.0.0
     container_name: MyWordpress
@@ -175,3 +177,7 @@ secrets:
     file: ../secrets/adminer_password.txt
   adminer_user:
     file: ../secrets/adminer_user.txt
+  auth_user:
+    file: ../secrets/auth_user.txt
+  auth_password:
+    file: ../secrets/auth_password.txt

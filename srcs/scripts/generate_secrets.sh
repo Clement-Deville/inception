@@ -12,7 +12,8 @@ fi
 for var in db_root_password db_database db_user db_user_password \
     wordpress_user wordpress_password \
     adminer_user adminer_password \
-    vsftpd_user vsftpd_password; do
+    vsftpd_user vsftpd_password \
+	auth_user auth_password; do
     if ! [ -f "${DIR}/${var}.txt" ] && ! [ -r "${DIR}/${var}.txt" ]; then
         echo "[i] Creating ${DIR}/${var}.txt.."
         touch ${DIR}/${var}.txt
@@ -30,7 +31,7 @@ if ! [ -f "${DIR}/localhost.key" ] && ! [ -r "${DIR}/localhost.key" ]; then
     echo "[i] SSL key successfully generated "
 fi
 
-chmod 700 -R ./secrets 
+chmod 700 -R ./secrets
 
 cat << EOF
 
@@ -51,4 +52,3 @@ EOF
 #         echo "[i] File db_${var}.txt has been created with the secret"
 #     fi
 # done
-        

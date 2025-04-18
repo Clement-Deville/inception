@@ -25,7 +25,6 @@ for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWOR
         	eval "export ${var}=$(read_secret "$wp_secret")"
     	fi
 
-	eval "echo \$${var}"
 	# Check _FILE
 	## If specific file is specified, read secret from it
    	eval wp_file_var="\$${var}_FILE"
