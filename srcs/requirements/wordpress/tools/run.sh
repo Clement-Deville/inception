@@ -64,7 +64,8 @@ else
 	mv /wordpress_setup/sample.com/wp-config.php "$DIR_PATH"/
 fi
 
-chown -R www:www-data "$DIR_PATH" && chmod -R 755 "$DIR_PATH"
+chown -R www:www-data "$DIR_PATH"
+#&& chmod -R 755 "$DIR_PATH"
 
 # cat << EOF
 # #############################
