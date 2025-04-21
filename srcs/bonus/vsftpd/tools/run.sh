@@ -119,4 +119,18 @@ done
 /bin/kill "$process_id"
 wait "$process_id"
 /bin/echo "$process_id" was terminated by a SIG"$(/bin/kill -l "$?")" signal
-/bin/kill -1
+
+echo "[i] Killing other processes"
+
+for pid in $(ps -eo pid | grep -vE '^( *1| *PID| *'"$$"')'); do
+	kill -TERM "$pid" 2>/dev/null
+done
+
+sleep 2
+
+for pid in $(ps -eo pid | grep -vE '^( *1| *PID| *'"$$"')'); do
+	kill -KILL "$pid" 2>/dev/null
+done
+
+echo "✅ Nettoyage terminé."
+exit 0
