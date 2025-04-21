@@ -37,7 +37,8 @@ done
 #Verifier car comme un volume est monte, le DIR_PATH existe deja meme s'il est vide
 if [ -d /wordpress_setup/sample.com ] && ! [ -f "$DIR_PATH/wp-config.php" ]; then
 	echo "[i] Creating Wordpress Website"
-	cp -R /wordpress_setup/sample.com/ "$DIR_PATH"
+	#cp -R /wordpress_setup/sample.com/ "$DIR_PATH"/
+	cp -R /wordpress_setup/sample.com/* "$DIR_PATH"/
 	cat > ~/.my.cnf << EOF
 [mysql]
 ssl-verify-server-cert=off
@@ -50,7 +51,7 @@ EOF
 		echo "Starting WP INSTALL"
 	rm ~/.my.cnf
 	wp-cli core install --path="$DIR_PATH" \
-		--url=localhost \
+		--url=localhost:4443 \
 		--title="Your website title" \
 		--admin_user="$WORDPRESS_USER" \
 		--admin_password="$WORDPRESS_PASSWORD" \
