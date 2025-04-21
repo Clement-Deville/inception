@@ -23,9 +23,10 @@ services:
       context: ./requirements/nginx/
       dockerfile: Dockerfile
     depends_on:
-      wordpress:
-        condition: service_started
-        restart: true
+      - wordpress
+      - adminer
+      - hugo
+      - goaccess 
     networks:
       - deepest_dream
     ports:
@@ -52,11 +53,8 @@ services:
       - db_user_password
       - db_database
     depends_on:
-#      redis:
-#        conditon: service_started
-#        restart: true
-      mariadb:
-        condition: service_started
+      - redis
+      - mariadb
     networks:
       - deepest_dream
     volumes:
@@ -70,15 +68,9 @@ services:
       context: ./bonus/adminer/
       dockerfile: Dockerfile
     depends_on:
-      wordpress:
-        condition: service_started
-        restart: true
-  #    mariadb:
-  #      condition: service_started
-  #      restart: true
-  #    nginx:
-  #      conditon: service_started
-  #      restart: true
+     mariadb:
+       condition: service_started
+       restart: true
     networks:
       - deepest_dream
     volumes:
@@ -95,9 +87,6 @@ services:
       - vsftpd_user
       - vsftpd.crt
       - vsftpd.key
-    depends_on:
-      nginx:
-        condition: service_started
     ports:
       - "20-21:20-21"
       # ftp passive ports
@@ -123,9 +112,6 @@ services:
     build:
       context: ./bonus/redis/
       dockerfile: Dockerfile
-    depends_on:
-      wordpress:
-        condition: service_started
     networks:
       - deepest_dream
   goaccess:
@@ -135,10 +121,6 @@ services:
     build:
       context: ./bonus/goaccess/
       dockerfile: Dockerfile
-    depends_on:
-      wordpress:
-        condition: service_started
-        restart: true
     networks:
       - deepest_dream
     volumes:
@@ -147,10 +129,6 @@ services:
 networks:
   deepest_dream:
     driver: bridge
-#volumes:
-#  wordpress_volume:
-#  dbdata:
-#  hugo_volume:
 secrets:
   certificate:
     file: ../secrets/nginx.crt

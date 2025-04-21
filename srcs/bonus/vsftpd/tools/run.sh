@@ -52,7 +52,7 @@ LOG_STDOUT=${LOG_STDOUT:-NO}
 
 addgroup -g 433 -S "$VSFTPD_USER" 2> /dev/null
 adduser -u 431 -D -G "$VSFTPD_USER" -h /home/vsftpd/"$VSFTPD_USER" -s /bin/false "$VSFTPD_USER" 2> /dev/null
-ret="$(echo $?)"
+ret="$?"
 echo "[CHECK] Checking if inital setup has been done.."
 if [ "$ret" -eq "0" ] ; then
 	echo "--->[NO] Launching initial setup!"
@@ -60,16 +60,11 @@ if [ "$ret" -eq "0" ] ; then
 	echo "$VSFTPD_USER:$VSFTPD_PASSWORD" | /usr/sbin/chpasswd
 	chown "$VSFTPD_USER:$VSFTPD_USER" /home/vsftpd/"$VSFTPD_USER"
 	echo "local_root=/mnt/wordpress" > /etc/vsftpd/vsftpd_user_conf/"$VSFTPD_USER"
-	# chown "$VSFTPD_USER:$VSFTPD_USER" /etc/vsftpd/vsftpd_user_conf/"$VSFTPD_USER"
 else
 	echo "--->[YES] Skipping initial setup!"
 fi
 
 PASV_ADDRESS=$(ip -o -4 addr list "$PASV_ADDRESS_INTERFACE" | head -n1 | awk '{print $4}' | cut -d/ -f1)
-
-# ## Mounting wordpress data folder to the user's home directory
-
-# mount --bind /mnt/wordpress "/home/vsftpd/$VSFTPD_USER/wordpress"
 
 # Building the configuration file
 VSFTPD_CONF=/etc/vsftpd/vsftpd.conf

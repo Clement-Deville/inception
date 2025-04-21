@@ -98,7 +98,7 @@ else
         return 1
     fi
 
-    cat << EOF > $tfile
+    cat << EOF > "$tfile"
 USE mysql;
 FLUSH PRIVILEGES ;
 GRANT ALL ON *.* TO 'root'@'%' identified by '$MYSQL_ROOT_PASSWORD' WITH GRANT OPTION ;
@@ -112,22 +112,22 @@ EOF
         echo "[i] Creating database: $MYSQL_DATABASE"
         if [ "$MYSQL_CHARSET" != "" ] && [ "$MYSQL_COLLATION" != "" ]; then
             echo "[i] with character set [$MYSQL_CHARSET] and collation [$MYSQL_COLLATION]"
-            echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` CHARACTER SET $MYSQL_CHARSET COLLATE $MYSQL_COLLATION;" >> $tfile
+            echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` CHARACTER SET $MYSQL_CHARSET COLLATE $MYSQL_COLLATION;" >> "$tfile"
         else
             echo "[i] with character set: 'utf8' and collation: 'utf8_general_ci'"
-            echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` CHARACTER SET utf8 COLLATE utf8_general_ci;" >> $tfile
+            echo "CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\` CHARACTER SET utf8 COLLATE utf8_general_ci;" >> "$tfile"
         fi
 
         if [ "$MYSQL_USER" != "" ]; then
             echo "[i] Creating user: $MYSQL_USER with password $MYSQL_PASSWORD"
-            echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* to '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" >> $tfile
+            echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* to '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" >> "$tfile"
         fi
     fi
 
 	## Launching Mysql to create and apply configuration
 
-    /usr/bin/mysqld --user=mysql --bootstrap --skip-name-resolve --skip-networking=0 < $tfile
-    rm -f $tfile
+    /usr/bin/mysqld --user=mysql --bootstrap --skip-name-resolve --skip-networking=0 < "$tfile"
+    rm -f "$tfile"
 
     echo
     echo 'MySQL init process done. Ready for start up.'
@@ -136,4 +136,4 @@ EOF
     echo "exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0" "$@"
 fi
 
-exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@
+exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 "$@"

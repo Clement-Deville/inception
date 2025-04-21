@@ -10,10 +10,6 @@ RUN apk update \
 COPY --chown=nginx: ./conf/nginx.conf /etc/nginx/nginx.conf
 COPY --chmod=744 ./tools/run.sh /sbin/run.sh
 
-## Adding module to allow http authentification
-
-# RUN
-
 EXPOSE 443
 
 CMD /sbin/run.sh

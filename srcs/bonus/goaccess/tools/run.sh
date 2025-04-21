@@ -1,6 +1,4 @@
 #!/bin/sh
-#exec sleep infinity
-#exec goaccess /var/log/nginx/access.log -o /var/www/html/sample.com/report.html --real-time-html --log-format=COMBINED
 
 if ! [ -d /var/www/html/sample.com/goaccess ]; then
 	mkdir -p /var/www/html/sample.com/goaccess

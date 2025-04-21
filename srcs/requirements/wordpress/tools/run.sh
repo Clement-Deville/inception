@@ -66,16 +66,16 @@ fi
 
 chown -R www:www-data "$DIR_PATH"
 
-# cat << EOF
-# #############################
-# #           DEBUG           #
-# #############################
-# EOF
+cat << EOF
+#############################
+#           DEBUG           #
+#############################
+EOF
 
-# for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
-#     eval exp_var="\$${var}"
+for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWORD; do
+    eval exp_var="\$${var}"
 
-#     echo "$var = ${exp_var}"
-# done
+    echo "$var = ${exp_var}"
+done
 
 exec su - www -c 'php-fpm82 --nodaemonize'

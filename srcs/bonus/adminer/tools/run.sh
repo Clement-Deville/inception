@@ -1,6 +1,5 @@
 #!/bin/sh
 
-#rm -rf /var/www/html/sample.com &&\
 if ! [ -d /var/www/html/sample.com/adminer ] ; then
 	mkdir /var/www/html/sample.com/adminer \
 		&& mv /setup/* /var/www/html/sample.com/adminer \

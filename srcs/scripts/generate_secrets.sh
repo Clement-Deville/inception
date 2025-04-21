@@ -44,14 +44,3 @@ echo "my_secret_password" > password.txt
 
 Also, an SSL certificate is generated for as "autosigned".
 EOF
-
-# for var in root_password database user password; do
-#     echo "[i] Checking if db_${var}.txt already exist .."
-#     if [ -f "db_${var}.txt" ] && [ -r "db_${var}.txt"]; then
-#         echo "[i] File db_${var}.txt already exist"
-#     else
-#         echo "[i] File db_${var}.txt doesn't exist\nChoose your db_${var} secret: "
-#         cat > secrets/db_${var}.txt
-#         echo "[i] File db_${var}.txt has been created with the secret"
-#     fi
-# done
