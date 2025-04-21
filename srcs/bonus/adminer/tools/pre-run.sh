@@ -12,10 +12,6 @@ PHP_CGI_FIX_PATHINFO=0
 
 sed -i "/listen =/c\listen = 0.0.0.0:9000" /etc/php82/php-fpm.d/www.conf
 sed -i "/;access.log/c\access.log = /var/log/php82/access.log" /etc/php82/php-fpm.d/www.conf
-#sed -i "/;listen.allowed_clients = /c\listen.allowed_clients = 127.0.0.1,0.0.0.0" /etc/php82/php-fpm.d/www.conf
-#sed -i "s|;listen.owner\s*=\s*nobody|listen.owner = nginx|g" /etc/php82/php-fpm.d/www.conf
-#sed -i "s|;listen.group\s*=\s*nobody|listen.group = ${PHP_FPM_GROUP}|g" /etc/php82/php-fpm.d/www.conf
-#sed -i "s|;listen.mode\s*=\s*0660|listen.mode = ${PHP_FPM_LISTEN_MODE}|g" /etc/php82/php-fpm.d/www.conf
 sed -i "s|user\s*=\s*nobody|user = ${PHP_FPM_USER}|g" /etc/php82/php-fpm.d/www.conf
 sed -i "s|group\s*=\s*nobody|group = ${PHP_FPM_GROUP}|g" /etc/php82/php-fpm.d/www.conf
 sed -i "s|;log_level\s*=\s*notice|log_level = debug|g" /etc/php82/php-fpm.d/www.conf #uncommenting line

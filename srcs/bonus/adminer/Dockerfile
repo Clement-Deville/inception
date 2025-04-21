@@ -11,10 +11,9 @@ USER root
 COPY --chown=:www-data ./tools/run.sh /setup/run.sh
 COPY --chown=:www-data ./tools/pre-run.sh /setup/pre-run.sh
 
-RUN adduser -G www-data www || echo 1 && (cd /setup && wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php && chown :www-data /setup/*.php ) && chmod +x /setup/*.sh && /setup/pre-run.sh
-#&& addgroup -S -g 1001 nginx && adduser -S -g 1001 -u 1001 --ino-create-home nginx \
-#	&& curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp-cli && chown :www-data /usr/bin/wp-cli
-#RUN apk add mariadb-client
+RUN adduser -G www-data www || echo 1 \
+	&& (cd /setup && wget https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1-en.php && chown :www-data /setup/*.php ) \
+	&& chmod +x /setup/*.sh && /setup/pre-run.sh
 
 EXPOSE 9000
 

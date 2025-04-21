@@ -93,9 +93,9 @@ services:
     build:
       context: ./bonus/vsftpd/
       dockerfile: Dockerfile
-      secrets:
-        - vsftpd_password
-        - vsftpd_user
+    secrets:
+      - vsftpd_password
+      - vsftpd_user
     depends_on:
       nginx:
         condition: service_started
@@ -105,7 +105,7 @@ services:
       - "21100-21110:21100-21110"
     volumes:
       #- wordpress_volume:/srv/ftps
-      - ~/data/srcs_wordpress_volume:/home/vsftpd/tssr/wordpress
+      - ~/data/srcs_wordpress_volume:/mnt/wordpress
   hugo:
     image: cdeville/hugo:v1.0.0
     container_name: MyHugo

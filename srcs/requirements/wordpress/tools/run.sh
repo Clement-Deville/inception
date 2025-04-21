@@ -65,7 +65,6 @@ else
 fi
 
 chown -R www:www-data "$DIR_PATH"
-#&& chmod -R 755 "$DIR_PATH"
 
 # cat << EOF
 # #############################
