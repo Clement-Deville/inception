@@ -12,4 +12,5 @@ chown -R :www-data /var/www/html && chmod -R 755 /var/www/html
 # start php-fpm
 
 mkdir -p /usr/logs/php-fpm
+
 exec php-fpm82 --nodaemonize

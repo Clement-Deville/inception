@@ -20,17 +20,20 @@ for var in db_root_password db_database db_user db_user_password \
     fi
 done
 
-if ! [ -f "${DIR}/localhost.key" ] && ! [ -r "${DIR}/localhost.key" ]; then
-    echo "[i] Generating SSL key"
-    openssl req -x509 -nodes -days 365 \
-        -newkey rsa:4096 \
-        -keyout ${DIR}/localhost.key \
-        -out ${DIR}/localhost.crt \
-        -subj "/C=XX/ST=XX/L=XX/O=XX/OU=XX/CN=XX" \
-            || { echo "Failed to generate SSL Keys"; exit 1; }
-    echo "[i] SSL key successfully generated "
-fi
-
+for key in nginx vsftpd; do
+	if ! [ -f "${DIR}/${key}.key" ] && ! [ -r "${DIR}/${key}.key" ]; then
+		echo "[i] Generating ${key} SSL key"
+		openssl req -x509 -nodes -days 365 \
+			-newkey rsa:4096 \
+			-keyout ${DIR}/${key}.key \
+			-out ${DIR}/${key}.crt \
+			-subj "/C=XX/ST=XX/L=XX/O=XX/OU=XX/CN=XX" \
+				|| { echo "Failed to generate SSL Keys"; exit 1; }
+		echo "[i] SSL key successfully generated "
+	else
+		echo "[i] ${key} SSL key already created"
+	fi
+done
 chmod 700 -R ./secrets
 
 cat << EOF

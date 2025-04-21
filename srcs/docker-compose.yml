@@ -69,9 +69,6 @@ services:
     build:
       context: ./bonus/adminer/
       dockerfile: Dockerfile
-      secrets:
-        - adminer_password
-        - adminer_user
     depends_on:
       wordpress:
         condition: service_started
@@ -96,6 +93,8 @@ services:
     secrets:
       - vsftpd_password
       - vsftpd_user
+      - vsftpd.crt
+      - vsftpd.key
     depends_on:
       nginx:
         condition: service_started
@@ -154,9 +153,9 @@ networks:
 #  hugo_volume:
 secrets:
   certificate:
-    file: ../secrets/localhost.crt
+    file: ../secrets/nginx.crt
   key:
-    file: ../secrets/localhost.key
+    file: ../secrets/nginx.key
   wordpress_password:
     file: ../secrets/wordpress_password.txt
   wordpress_user:
@@ -173,11 +172,11 @@ secrets:
     file: ../secrets/vsftpd_password.txt
   vsftpd_user:
     file: ../secrets/vsftpd_user.txt
-  adminer_password:
-    file: ../secrets/adminer_password.txt
-  adminer_user:
-    file: ../secrets/adminer_user.txt
   auth_user:
     file: ../secrets/auth_user.txt
   auth_password:
     file: ../secrets/auth_password.txt
+  vsftpd.crt:
+    file: ../secrets/vsftpd.crt
+  vsftpd.key:
+    file: ../secrets/vsftpd.key
