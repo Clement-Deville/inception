@@ -11,8 +11,7 @@ RUN curl https://fr.wordpress.org/latest-fr_FR.zip --output /latest-fr_FR.zip \
 	&& mv /wordpress /wordpress_setup/sample.com && ln -s /usr/bin/php82 /usr/bin/php
 
 COPY --chown=:www-data ./conf/* /wordpress_setup/sample.com/
-COPY --chown=:www-data ./tools/run.sh /wordpress_setup/run.sh
-COPY --chown=:www-data ./tools/pre-run.sh /wordpress_setup/pre-run.sh
+COPY --chown=:www-data ./tools/*.sh /wordpress_setup/
 
 RUN adduser -G www-data www 2> /debug || echo lol && chmod +x /wordpress_setup/*.sh && /wordpress_setup/pre-run.sh\
 && addgroup -S -g 1001 nginx && adduser -S -g 1001 -u 1001 --no-create-home nginx \
