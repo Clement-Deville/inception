@@ -40,6 +40,11 @@ if ! [ -f /etc/nginx/auth/goaccess/.htpasswd ]; then
 	htpasswd -b -c /etc/nginx/auth/goaccess/.htpasswd "$AUTH_USER" "$AUTH_PASSWORD" 2>/dev/null
 fi
 
+## GENERATING nginx.conf from template
+
+envsubst < /etc/nginx/nginx.conf.template \
+	> /etc/nginx/nginx.conf && chown nginx:nginx /etc/nginx/nginx.conf 
+
 ## Starts NGINX
 
 echo "[i] Launching nginx.."

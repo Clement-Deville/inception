@@ -22,6 +22,9 @@ services:
     build:
       context: ./requirements/nginx/
       dockerfile: Dockerfile
+    env_file:
+      - path: ../.env
+        required: true
     depends_on:
       - wordpress
       - adminer

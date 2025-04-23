@@ -68,6 +68,8 @@ make down
 
 ## 🔆 LES DIFFERENTS SERVICES/CONTENEURS
 
+## --> PARTIE OBLIGATOIRE:
+
 - ## Nginx:
 C'est le serveur web qui a le role ici de reverse proxy. Il transmet les requetes, gere le traffic et le chiffrement des donnees grace a TLS v1.2/1.3.
 
@@ -78,6 +80,8 @@ PHP-FPM s'occupe d'executer les scripts PHP pour NGINX via FASTCGI.
 
 - ## Mariadb:
 Mariadb est un systeme de gestion de base de donne qui est necessaire au fonctionnement de Wordpress, la base de donnee est stocker sur un volume docker.
+
+## --> PARTIE BONUS:
 
 - ## Redis:
 Redis est un systeme de gestion de cache de base de donnee, il stocke les donnes dans la memoire vive pour permettre une reponse plus rapide du serveur.
