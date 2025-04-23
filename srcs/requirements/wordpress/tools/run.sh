@@ -51,11 +51,11 @@ EOF
 		echo "Starting WP INSTALL"
 	rm ~/.my.cnf
 	wp-cli core install --path="$DIR_PATH" \
-		--url=localhost:4443 \
-		--title="Your website title" \
+		--url="$CUSTOM_URL" \
+		--title="$WEBSITE_TITLE" \
 		--admin_user="$WORDPRESS_USER" \
 		--admin_password="$WORDPRESS_PASSWORD" \
-		--admin_email="your_email@example.com" \
+		--admin_email="$ADMIN_EMAIL" \
 			|| (rm "$DIR_PATH"/wp-config.php && exit 1)
 	curl https://downloads.wordpress.org/plugin/redis-cache.2.5.4.zip --output redis-cache.2.5.4.zip
 	wp-cli --path="$DIR_PATH" plugin install redis-cache.2.5.4.zip --activate
