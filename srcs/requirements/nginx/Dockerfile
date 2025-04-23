@@ -7,7 +7,7 @@ RUN apk update \
 	&& apk add --no-cache nginx apache2-utils envsubst\
 	&& rm -f /var/cache/apk/*
 
-COPY --chown=nginx: ./conf/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=nginx: ./conf/nginx.conf.template /etc/nginx/nginx.conf.template
 COPY --chmod=744 ./tools/run.sh /sbin/run.sh
 
 EXPOSE 443
