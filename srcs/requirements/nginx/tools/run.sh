@@ -42,8 +42,10 @@ fi
 
 ## GENERATING nginx.conf from template
 
-envsubst < /etc/nginx/nginx.conf.template \
-	> /etc/nginx/nginx.conf && chown nginx:nginx /etc/nginx/nginx.conf 
+envsubst "\$DOMAIN_NAME"  < /etc/nginx/nginx.conf.template \
+	> /etc/nginx/nginx.conf && chown nginx:nginx /etc/nginx/nginx.conf
+#cp /etc/nginx/nginx.conf.template /etc/nginx/nginx.conf \
+#	&& chown nginx:nginx /etc/nginx/nginx.conf 
 
 ## Starts NGINX
 

@@ -1,3 +1,5 @@
 # IT IS VERY IMPORTANT TO AVOID ANY SECRET FROM BEHING PUSHED ON GIT
 secrets/*
 srcs/.env
+*/*.env
+*.env
