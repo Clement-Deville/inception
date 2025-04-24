@@ -22,9 +22,8 @@ services:
     build:
       context: ./requirements/nginx/
       dockerfile: Dockerfile
-    env_file:
-      - path: ../.env
-        required: true
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
     depends_on:
       - wordpress
       - adminer
@@ -49,6 +48,9 @@ services:
     build:
       context: ./requirements/wordpress/
       dockerfile: Dockerfile
+    environment:
+      - WEBSITE_TITLE=${WEBSITE_TITLE}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
     secrets:
       - wordpress_password
       - wordpress_user
@@ -124,6 +126,8 @@ services:
     build:
       context: ./bonus/goaccess/
       dockerfile: Dockerfile
+    environment:
+      - CUSTOM_URL=${CUSTOM_URL}
     networks:
       - deepest_dream
     volumes:
