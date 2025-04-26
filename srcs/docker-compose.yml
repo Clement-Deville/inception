@@ -51,12 +51,33 @@ services:
     environment:
       - WEBSITE_TITLE=${WEBSITE_TITLE}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - CUSTOM_URL=${CUSTOM_URL}
     secrets:
-      - wordpress_password
-      - wordpress_user
-      - db_user
-      - db_user_password
-      - db_database
+      - source: wordpress_password
+        target: wordpress_password
+        uid: '1000'
+        gid: '1000'
+        mode: 0440
+      - source: wordpress_user
+        target: wordpress_user
+        uid: '1000'
+        gid: '1000'
+        mode: 0440
+      - source: db_user
+        target: db_user
+        uid: '1000'
+        gid: '1000'
+        mode: 0440
+      - source: db_user_password
+        target: db_user_password
+        uid: '1000'
+        gid: '1000'
+        mode: 0440
+      - source: db_database
+        target: db_database
+        uid: '1000'
+        gid: '1000'
+        mode: 0440
     depends_on:
       - redis
       - mariadb

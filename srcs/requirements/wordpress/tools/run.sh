@@ -79,4 +79,7 @@ for var in WORDPRESS_USER WORDPRESS_PASSWORD DB_DATABASE DB_USER DB_USER_PASSWOR
     echo "$var = ${exp_var}"
 done
 
-exec su - www -c 'php-fpm82 --nodaemonize'
+#sleep infinity
+exec php-fpm82 --nodaemonize
+#su - www -c 'echo $DB_USER > /tmp/db_user.txt'
+#exec sh -c "echo '$DB_USER' > /tmp/db_user.txt && php-fpm82 --nodaemonize"

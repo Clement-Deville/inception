@@ -21,16 +21,16 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-// define( 'DB_NAME', getenv('db_database') );
-define( 'DB_NAME', rtrim(file_get_contents("/run/secrets/db_database"), "\r\n") );
+define( 'DB_NAME', getenv('DB_DATABASE') );
+//define( 'DB_NAME', rtrim(file_get_contents("/run/secrets/db_database"), "\r\n") );
 ## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV## USE GETENV
 /** Database username */
-// define( 'DB_USER', getenv('db_user') );
-define( 'DB_USER', rtrim(file_get_contents("/run/secrets/db_user"), "\r\n") );
+define( 'DB_USER', getenv('DB_USER') );
+#define( 'DB_USER', rtrim(file_get_contents("/run/secrets/db_user"), "\r\n") );
 
 /** Database password */
-// define( 'DB_PASSWORD', 'db_user_password' );
-define( 'DB_PASSWORD', rtrim(file_get_contents("/run/secrets/db_user_password"), "\r\n") );
+define( 'DB_PASSWORD', getenv('DB_USER_PASSWORD') );
+#define( 'DB_PASSWORD', rtrim(file_get_contents("/run/secrets/db_user_password"), "\r\n") );
 
 /** Database hostname */
 define( 'DB_HOST', 'MyMariadb:3306' );

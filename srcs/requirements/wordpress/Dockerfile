@@ -10,7 +10,7 @@ RUN curl https://fr.wordpress.org/latest-fr_FR.zip --output /latest-fr_FR.zip \
 	&& unzip /latest-fr_FR.zip && rm /latest-fr_FR.zip && mkdir /wordpress_setup\
 	&& mv /wordpress /wordpress_setup/sample.com && ln -s /usr/bin/php82 /usr/bin/php
 
-COPY --chown=:www-data ./conf/* /wordpress_setup/sample.com/
+COPY --chown=:www-data ./conf/wp-config.php /wordpress_setup/sample.com/
 COPY --chown=:www-data ./tools/*.sh /wordpress_setup/
 
 RUN adduser -G www-data www 2> /debug || echo lol && chmod +x /wordpress_setup/*.sh && /wordpress_setup/pre-run.sh\
