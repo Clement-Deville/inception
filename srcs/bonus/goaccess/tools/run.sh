@@ -13,5 +13,5 @@ exec /usr/bin/goaccess -f /var/log/nginx/access.log \
           --real-time-html \
           -o /var/www/html/sample.com/goaccess/report.html --port=7890 \
           --config-file=/etc/goaccess/goaccess.conf --log-format=COMBINED \
-	  --ws-url=wss://"$CUSTOM_URL"/goaccess/ws
+	  --ws-url=wss://"$WEBSOCKET_URL"/goaccess/ws
 

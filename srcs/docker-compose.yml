@@ -28,7 +28,7 @@ services:
       - wordpress
       - adminer
       - hugo
-      - goaccess 
+      - goaccess
     networks:
       - deepest_dream
     ports:
@@ -116,7 +116,7 @@ services:
     ports:
       - "20-21:20-21"
       # ftp passive ports
-      - "21100-21110:21100-21110"
+      - "24100-24110:21100-21110"
     volumes:
       #- wordpress_volume:/srv/ftps
       - ~/data/srcs_wordpress_volume:/mnt/wordpress
@@ -148,7 +148,7 @@ services:
       context: ./bonus/goaccess/
       dockerfile: Dockerfile
     environment:
-      - CUSTOM_URL=${CUSTOM_URL}
+      - WEBSOCKET_URL=${WEBSOCKET_URL}
     networks:
       - deepest_dream
     volumes:
