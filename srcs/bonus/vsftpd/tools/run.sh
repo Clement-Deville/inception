@@ -42,7 +42,7 @@ echo "VSFTPD PASSWORD: $VSFTPD_PASSWORD"
 VSFTPD_USER=${VSFTPD_USER:-your_user}
 VSFTPD_PASSWORD=${VSFTPD_PASSWORD:-your_password}
 PASV_ENABLE=${PASV_ENABLE:-YES}
-PASV_ADDRESS=${PASV_ADDRESS:-}
+PASV_ADDRESS=${PASV_ADDRESS:-127.0.0.1}
 PASV_ADDRESS_INTERFACE=${PASV_ADDRESS_INTERFACE:-eth0}
 PASV_ADDR_RESOLVE=${PASV_ADDR_RESOLVE:-NO}
 PASV_MIN_PORT=${PASV_MIN_PORT:-21100}
@@ -64,7 +64,7 @@ else
 	echo "--->[YES] Skipping initial setup!"
 fi
 
-PASV_ADDRESS=$(ip -o -4 addr list "$PASV_ADDRESS_INTERFACE" | head -n1 | awk '{print $4}' | cut -d/ -f1)
+#PASV_ADDRESS=$(ip -o -4 addr list "$PASV_ADDRESS_INTERFACE" | head -n1 | awk '{print $4}' | cut -d/ -f1)
 
 # Building the configuration file
 VSFTPD_CONF=/etc/vsftpd/vsftpd.conf
