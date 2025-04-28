@@ -5,10 +5,6 @@ RUN apk add --no-cache ca-certificates && apk -U upgrade\
 				openssl \
 				vsftpd
 
-RUN openssl req -x509 -nodes -days 7300 \
-            -newkey rsa:2048 -keyout /etc/vsftpd/vsftpd.pem -out /etc/vsftpd/vsftpd.pem \
-            -subj "/C=FR/O=My company/CN=example.org"
-
 RUN mkdir -p /home/vsftpd/ \
 	&& mkdir -p /var/log/vsftpd \
 	&& chown -R ftp:ftp /home/vsftpd/ \

@@ -39,8 +39,8 @@ echo "VSFTPD PASSWORD: $VSFTPD_PASSWORD"
 
 
 # Define default values of Environment Variables
-VSFTPD_USER=${VSFTPD_USER:-tssr}
-VSFTPD_PASSWORD=${VSFTPD_PASSWORD:-tssr_passwd}
+VSFTPD_USER=${VSFTPD_USER:-your_user}
+VSFTPD_PASSWORD=${VSFTPD_PASSWORD:-your_password}
 PASV_ENABLE=${PASV_ENABLE:-YES}
 PASV_ADDRESS=${PASV_ADDRESS:-}
 PASV_ADDRESS_INTERFACE=${PASV_ADDRESS_INTERFACE:-eth0}
@@ -51,7 +51,7 @@ FTP_MODE=${FTP_MODE:-ftp}
 LOG_STDOUT=${LOG_STDOUT:-NO}
 
 addgroup -g 433 -S "$VSFTPD_USER" 2> /dev/null
-adduser -u 431 -D -G "$VSFTPD_USER" -h /home/vsftpd/"$VSFTPD_USER" -s /bin/false "$VSFTPD_USER" 2> /dev/null
+adduser -u 1000 -D -G "$VSFTPD_USER" -h /home/vsftpd/"$VSFTPD_USER" -s /bin/false "$VSFTPD_USER" 2> /dev/null
 ret="$?"
 echo "[CHECK] Checking if inital setup has been done.."
 if [ "$ret" -eq "0" ] ; then

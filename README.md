@@ -7,7 +7,7 @@ Ce projet est une introduction a l'administration systeme a travers la la mise e
 - Docker et Docker Compose
 - [Serveur web] Nginx
 - [CMS] Wordpress
-- [Langages] Bash, Golang, PHP, Dockerfile, Makefile  
+- [Langages] Bash, Golang, PHP, Dockerfile, Makefile
 - [Autres] Redis, Goaccess, Hugo, VSFTPD, adminer
 ---
 
@@ -16,7 +16,7 @@ Ce projet est une introduction a l'administration systeme a travers la la mise e
 ### Prérequis:
 - Distribution Linux
 - Privileges requis pour Docker
-### Dependances: 
+### Dependances:
 - Docker, Docker compose
 - OpenSSL (Certificats)
 
@@ -32,12 +32,13 @@ cd inception
 # Configurer les variables d'environnement
 cp .env.example .env
 # Modifier les valeurs du fichier .env selon votre environnement
+# POUR LES SECRETS SE REPORTER A LA RUBRIQUE EXPLICATIVE
 
 # Gestion des secrets (Docker secrets)
 make secrets ## Pour generer des fichiers vides dans lesquels ecrire les secrets correspondants
 
 # Lancer le projet
-make 
+make
 # Build les images et lance les conteneurs en arriere plan.
 ```
 ### Commandes supplementaires:
@@ -93,17 +94,17 @@ Adminer est un outil de gestion de base de donnee, il met a disposition une inte
 Hugo est un logiciel de generation de page statique ultra rapide ecrit en Go, dans notre cas une page statique exemple est generee et accessible a l'adresse: [https://url_de_votre_site/hugo]().
 
 - ## Goaccess
-Goaccess est une application de monitoring Web ayant a la fois une interface web mais aussi une interface utilisable dans un terminal. 
+Goaccess est une application de monitoring Web ayant a la fois une interface web mais aussi une interface utilisable dans un terminal.
 
 Une authentification sera effectue grace a HTTP Basic Authenfication a l'adresse: [https://url_de_votre_site/goaccess]().
 
 - ## VSFTPD
-Vsftpd est serveur FTP repute pour sa securite. Il est configure pour accepter aussi le passive mode et permettra d'acceder au volume ou sont stockes les fichiers de Wordpress.
+Vsftpd est serveur FTP repute pour sa securite. Il est configure pour accepter aussi le mode passif et permettra d'acceder au volume ou sont stockes les fichiers de Wordpress.
 
 ---
-## 💿 LES DIFFERENTS VOLUMES 
+## 💿 LES DIFFERENTS VOLUMES
 
-### - Volume wordpress: 
+### - Volume wordpress:
 Stocke les fichiers relatifs a Wordpress, Adminer, Goaccess.
 
 ### - Volume Database:
@@ -114,3 +115,43 @@ Permet de garder les logs de Nginx de maniere persistante et les rends disponibl
 
 ### - Volume Hugo:
 Permet de stocker les fichiers de configuration et les pages web de Hugo.
+
+
+---
+##  🔐 LES SECRETS:
+
+### - LES IDENTIFIANTS DE CONNECTION
+Il y a deux manieres actuellement implementee ici pour la transmission des secrets aux services correspondants:
+- L'utilisation de Docker Secrets
+- L'utilisation de l'environnement (.env)
+
+### IMPORTANT:
+
+Il est important de noter qu'en cas de conflit entre les methodes, le secret defini dans le .env sera retenu.
+
+#### - **Docker Secrets:**
+Ici nous allons importer ou creer des fichiers depuis l'hote qui seront lus par les conteneurs correspondants grace a un montage de type "secret" (read-only) qui apparaitra dans le conteneur au chemin: "/run/secrets/nom_du_secret"
+
+Pour cela nous utilisons:
+```bash
+## GENERE LES CERTIFICATS ET LES FICHIERS OU ECRIRE NOS SECRETS DANS LE DOSSIER ./secrets/
+make secrets
+```
+
+Nous pouvons aussi les supprimer grace a la commande:
+```bash
+## SUPPRIME LES CERTIFICATS ET FICHIER AVEC LES SECRETS
+make clean_sec
+```
+
+#### - **Secrets depuis l'environnement:**
+Il nous suffit de remplir ici le fichier .env que nous avons cree depuis le .env.example, par exemple:
+```bash
+DB_USER="my_user"
+DB_USER_PASSWORD="3rhklhg3w4tdgd"
+```
+
+## 👤 Auteur:
+
+    Clement DEVILLE
+    Email :  cdeville@student.42.fr

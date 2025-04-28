@@ -1,4 +1,7 @@
 services:
+
+# DATABASE
+
   mariadb:
     image: cdeville/mariadb:v1.0.0
     container_name: MyMariadb
@@ -11,10 +14,21 @@ services:
       - db_root_password
       - db_user
       - db_user_password
+    environment:
+      - CHARSET=${DB_CHARSET}
+      - COLLATION=${DB_COLLATION}
+      # SECRETS
+      - ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - DATABASE=${DB_DATABASE}
+      - USER=${DB_USER}
+      - PASSWORD=${DB_USER_PASSWORD}
     networks:
       - deepest_dream
     volumes:
     - ~/data/srcs_dbdata:/var/lib/mysql
+
+# WEB SERVER
+
   nginx:
     image: cdeville/nginx:v1.0.0
     container_name: MyNginx
@@ -24,6 +38,9 @@ services:
       dockerfile: Dockerfile
     environment:
       - DOMAIN_NAME=${DOMAIN_NAME}
+      # SECRETS
+      - AUTH_USER=${AUTH_USER}
+      - AUTH_PASSWORD=${AUTH_PASSWORD}
     depends_on:
       - wordpress
       - adminer
@@ -41,6 +58,9 @@ services:
       - key
       - auth_user
       - auth_password
+
+## WORDPRESS
+
   wordpress:
     image: cdeville/wordpress:v1.0.0
     container_name: MyWordpress
@@ -52,32 +72,18 @@ services:
       - WEBSITE_TITLE=${WEBSITE_TITLE}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - CUSTOM_URL=${CUSTOM_URL}
+      # SECRETS
+      - WORDPRESS_USER=${WORDPRESS_USER}
+      - WORDPRESS_PASSWORD=${WORDPRESS_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USER=${DB_USER}
+      - DB_USER_PASSWORD=${DB_USER_PASSWORD}
     secrets:
-      - source: wordpress_password
-        target: wordpress_password
-        uid: '1000'
-        gid: '1000'
-        mode: 0440
-      - source: wordpress_user
-        target: wordpress_user
-        uid: '1000'
-        gid: '1000'
-        mode: 0440
-      - source: db_user
-        target: db_user
-        uid: '1000'
-        gid: '1000'
-        mode: 0440
-      - source: db_user_password
-        target: db_user_password
-        uid: '1000'
-        gid: '1000'
-        mode: 0440
-      - source: db_database
-        target: db_database
-        uid: '1000'
-        gid: '1000'
-        mode: 0440
+      - wordpress_password
+      - wordpress_user
+      - db_user
+      - db_user_password
+      - db_database
     depends_on:
       - redis
       - mariadb
@@ -85,7 +91,11 @@ services:
       - deepest_dream
     volumes:
       - ~/data/srcs_wordpress_volume:/var/www/html
+
 ##### BONUS #####
+
+# ADMINER (DATABASE INTERFACE MANAGER)
+
   adminer:
     image: cdeville/adminer:v1.0.0
     container_name: MyAdminer
@@ -101,6 +111,9 @@ services:
       - deepest_dream
     volumes:
       - ~/data/srcs_wordpress_volume:/var/www/html
+
+# FTP SERVER
+
   vsftpd:
     image: cdeville/vsftpd:v1.0.0
     container_name: MyVsftpd
@@ -113,13 +126,25 @@ services:
       - vsftpd_user
       - vsftpd.crt
       - vsftpd.key
+    environment:
+      - PASV_ENABLE=${PASV_ENABLE}
+      - PASV_MIN_PORT=${PASV_MIN_PORT}
+      - PASV_MAX_PORT=${PASV_MAX_PORT}
+      - FTP_MODE=${FTP_MODE}
+      - LOG_STDOUT=${LOG_STDOUT}
+      # SECRETS
+      - VSFTPD_USER=${VSFTPD_USER}
+      - VSFTPD_PASSWORD=${VSFTPD_PASSWORD}
     ports:
       - "20-21:20-21"
       # ftp passive ports
-      - "24100-24110:21100-21110"
+      - "${PASV_MIN_PORT:-21100}-${PASV_MAX_PORT:-21110}:${PASV_MIN_PORT:-21100}-${PASV_MAX_PORT:-21110}"
     volumes:
       #- wordpress_volume:/srv/ftps
       - ~/data/srcs_wordpress_volume:/mnt/wordpress
+
+#STATIC WEBPAGE GENERATOR (HUGO)
+
   hugo:
     image: cdeville/hugo:v1.0.0
     container_name: MyHugo
@@ -131,6 +156,9 @@ services:
       - deepest_dream
     volumes:
       - ~/data/srcs_hugo_volume:/var/hugo
+
+# REDIS FOR DATABSE CACHING ON WORDPRESS
+
   redis:
     image: cdeville/redis:v1.0.0
     container_name: MyRedis
@@ -140,6 +168,9 @@ services:
       dockerfile: Dockerfile
     networks:
       - deepest_dream
+
+# GOACCESS FOR MONITORING
+
   goaccess:
     image: cdeville/goaccess:v1.0.0
     container_name: MyGoaccess
@@ -154,9 +185,15 @@ services:
     volumes:
       - ~/data/srcs_wordpress_volume:/var/www/html
       - ~/data/srcs_nginx_logs:/var/log/nginx
+
+# NETWORK
+
 networks:
   deepest_dream:
     driver: bridge
+
+# DOCKER SECRETS
+
 secrets:
   certificate:
     file: ../secrets/nginx.crt
