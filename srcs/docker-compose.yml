@@ -18,10 +18,10 @@ services:
       - CHARSET=${DB_CHARSET}
       - COLLATION=${DB_COLLATION}
       # SECRETS
-      - ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - DATABASE=${DB_DATABASE}
-      - USER=${DB_USER}
-      - PASSWORD=${DB_USER_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_USER_PASSWORD}
     networks:
       - deepest_dream
     volumes:
