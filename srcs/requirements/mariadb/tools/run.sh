@@ -57,7 +57,7 @@ else
     # Handle MYSQL_ROOT_PASSWORD
     if [ -n "$MYSQL_ROOT_PASSWORD_FILE" ]; then
         MYSQL_ROOT_PASSWORD=$(read_secret "$MYSQL_ROOT_PASSWORD_FILE")
-    elif [ -f "/run/secrets/db_root_password" ]; then
+    elif [ -z "$MYSQL_ROOT_PASSWORD" &&  -f "/run/secrets/db_root_password" ]; then
         MYSQL_ROOT_PASSWORD=$(read_secret "/run/secrets/db_root_password")
     fi
 
@@ -69,7 +69,7 @@ else
     # Handle MYSQL_DATABASE
     if [ -n "$MYSQL_DATABASE_FILE" ]; then
         MYSQL_DATABASE=$(read_secret "$MYSQL_DATABASE_FILE")
-    elif [ -f "/run/secrets/db_database" ]; then
+    elif [ -z "$MYSQL_DATABASE" && -f "/run/secrets/db_database" ]; then
         MYSQL_DATABASE=$(read_secret "/run/secrets/db_database")
     else
         MYSQL_DATABASE=${MYSQL_DATABASE:-""}
@@ -78,7 +78,7 @@ else
     # Handle MYSQL_USER
     if [ -n "$MYSQL_USER_FILE" ]; then
         MYSQL_USER=$(read_secret "$MYSQL_USER_FILE")
-    elif [ -f "/run/secrets/db_user" ]; then
+     elif [ -z "$MYSQL_USER" && -f "/run/secrets/db_user" ]; then
         MYSQL_USER=$(read_secret "/run/secrets/db_user")
     else
         MYSQL_USER=${MYSQL_USER:-""}
@@ -87,7 +87,7 @@ else
     # Handle MYSQL_PASSWORD
     if [ -n "$MYSQL_PASSWORD_FILE" ]; then
         MYSQL_PASSWORD=$(read_secret "$MYSQL_PASSWORD_FILE")
-    elif [ -f "/run/secrets/db_user_password" ]; then
+    elif [ -z "$MYSQL_PASSWORD" && -f "/run/secrets/db_user_password" ]; then
         MYSQL_PASSWORD=$(read_secret "/run/secrets/db_user_password")
     else
         MYSQL_PASSWORD=${MYSQL_PASSWORD:-""}

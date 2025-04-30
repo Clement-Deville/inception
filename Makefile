@@ -16,7 +16,11 @@ stop:
 down:
 	docker compose --env-file .env --project-directory $(WORKDIR) down
 
-re: down build up
+remove_volume:
+	echo "[i] Removing volumes:"
+	sudo rm -ir ~/data/*
+
+re: down remove_volume build up
 
 refresh: build up
 
