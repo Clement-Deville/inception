@@ -18,7 +18,7 @@ down:
 
 remove_volume:
 	echo "[i] Removing volumes:"
-	sudo rm -ir ~/data/*
+	sudo rm -Ir ~/data/*
 
 re: down remove_volume build up
 
